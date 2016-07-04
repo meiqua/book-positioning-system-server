@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 指定Struts 2配置文件的DTD信息 -->
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 配置了系列常量 -->
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	<package name="tao" extends="struts-default,json-default"
+		namespace="/struts2">
+		<action name="dispatch" class="dispatchAction">
+			<result name="query" type="redirectAction">
+				<param name="actionName">listItems</param>
+				<param name="namespace">/struts2</param>
+				<param name="parse">true</param>
+				<param name="content">${content}</param>
+			</result>
+
+			<result name="return" type="redirectAction">
+				<param name="actionName">return</param>
+				<param name="namespace">/struts2</param>
+				<param name="parse">true</param>
+				<param name="content">${content}</param>
+			</result>
+			<result name="fetch" type="redirectAction">
+				<param name="actionName">fetch</param>
+				<param name="namespace">/struts2</param>
+				<param name="parse">true</param>
+				<param name="content">${content}</param>
+			</result>
+			<result name="initial" type="redirectAction">
+				<param name="actionName">initial</param>
+				<param name="namespace">/struts2</param>
+				<param name="parse">true</param>
+				<param name="content">${content}</param>
+			</result>
+		</action>
+		<action name="return" class="returnAction"></action>
+		<action name="fetch" class="fetchAction"></action>
+		<action name="initial" class="initalAction"></action>
+		<action name="deleteItem" class="deleteItemAction">
+			<result name="success">/WEB-INF/content/thankyou.jsp</result>
+		</action>
+		<action name="admin" class="adminAction">
+			<result name="success">/WEB-INF/content/thankyou.jsp</result>
+		</action>
+		<action name="listAll" class="listAllAction">
+			<result name="success">/WEB-INF/content/listAll.jsp</result>
+		</action>
+		<action name="listItems" class="itemListAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">application/json</param>
+				<param name="root">items</param>
+			</result>
+		</action>
+
+		<!-- 让用户直接访问该应用时列出所有视图页面 -->
+		<action name="*">
+			<result>/WEB-INF/content/{1}.jsp</result>
+		</action>
+
+	</package>
+</struts>
