@@ -9,11 +9,6 @@ public class Item {
 	@Id @Column(name="id")
     private String id="?";
 
-	@Override
-	public String toString() {
-		return "Item [author=" + author + ", thumbnailUrl=" + thumbnailUrl + ", title=" + title + ", location="
-				+ location + ", state=" + state + ", id=" + id + "]";
-	}
 	@Column(name="author")
     private String author="?";
 	

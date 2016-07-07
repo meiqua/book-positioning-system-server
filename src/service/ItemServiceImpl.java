@@ -85,45 +85,20 @@ public class ItemServiceImpl implements ItemService
 	@Override
 	public void upItem(String location) {
 		// called when an item is put into the shelf
-		String head=ParseLocation.parseLocationForHead(location);
 		Item item=new Item();
-		String id="123321";//just create a temp item to save location
-		int state=-10;
-		String mThumbnailUrl="abc";//just convenient for finding
-		
-		while(itemDao.findByMyId(id)!=null){
-			id=id+"1";//id can't repeat
-			state=state-1;
-		}
-		item.setId(id);
+
+		int state=-100;
+
 		item.setState(state);
 		item.setLocation(location);
-		item.setThumbnailUrl(mThumbnailUrl);
-		
 		itemDao.update(item);
 		
+		itemDao.updateForUpItem(item);
 		
-		//state
-		List<Item> matchState=itemDao.findByState(state,head);
-		if(matchState.size()==2){
-			if(matchState.get(0).getThumbnailUrl().equals("abc")){
-				matchState.get(1)
-				.setLocation(matchState.get(0).getLocation());
-				matchState.get(1).setState(1);
-				itemDao.delete(matchState.get(0));
-				//itemDao.update(matchState.get(1));
-				itemDao.updateForUpItem(matchState.get(1));
-			}else if(matchState.get(1).getThumbnailUrl().equals("abc")){
-				matchState.get(0)
-				.setLocation(matchState.get(1).getLocation());
-				
-				matchState.get(0).setState(1);
-				itemDao.delete(matchState.get(1));
-				//itemDao.update(matchState.get(0));
-				itemDao.updateForUpItem(matchState.get(0));
-			}
-			
-		}
+		
+		//start match
+		//try to find state=-10 to match
+		//if false,try to find closest to match.
 	}
 
 	@Override
@@ -144,52 +119,28 @@ public class ItemServiceImpl implements ItemService
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	//	String head=ParseLocation.parseLocationForHead(location);
-//don't need parse location,because location here is just a head.
+
 		int state=-10;
-		String idTemp="123321";
-		
 
-		List<Item> itemList=itemDao.findByState(state,location);
-
-		//state-1
-		while(((!(itemList.contains(itemDao.findByMyId(idTemp))))
-				&&itemList.size()==1)
-				||itemList.size()>1){
-			state=state-1;
-			itemList=itemDao.findByState(state,location);
-			idTemp=idTemp+"1";
-		}
 		Item item=itemDao.findByMyId(id);
 		item.setState(state);
 		item.setLocation(location);
 		
 		itemDao.update(item);
-		
-		List<Item> matchState=itemDao.findByState(state,location);
-		if(matchState.size()==2){
-			if(matchState.get(0).getThumbnailUrl().equals("abc")){
-				matchState.get(1)
-				.setLocation(matchState.get(0).getLocation());
-				matchState.get(1).setState(1);
-				itemDao.delete(matchState.get(0));
-				//itemDao.update(matchState.get(1));
-				itemDao.updateForUpItem(matchState.get(1));
-			}else if(matchState.get(1).getThumbnailUrl().equals("abc")){
-				matchState.get(0)
-				.setLocation(matchState.get(1).getLocation());			
-				matchState.get(0).setState(1);
-				itemDao.delete(matchState.get(1));
-				//itemDao.update(matchState.get(0));
-				itemDao.updateForUpItem(matchState.get(0));
-			}
-		}
 	}
 
 	@Override
-	public void initialItem(String content) {
+	public void initialItem(String location) {
 		// TODO Auto-generated method stub
+		Item item=new Item();
+
+		int state=10;
+
+		item.setState(state);
+		item.setLocation(location);
+		itemDao.update(item);
 		
+		itemDao.updateForUpItem(item);
 	}
 
 

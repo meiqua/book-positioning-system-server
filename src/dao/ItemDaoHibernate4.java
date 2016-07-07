@@ -133,7 +133,7 @@ public class ItemDaoHibernate4 extends BaseDaoHibernate4<Item>
 		for(int i=0;i<list.size();i++){
 			tempLocId=ParseLocation.parseLocationForId(list.get(i).getLocation());
 			if(tempLocId>=entityLocId){
-				list.get(i).setLocation(ParseLocation.parseIdForLocation(entityLocation,tempLocId+1));
+				list.get(i).setLocation(ParseLocation.parseIdForLocation(entityLocation,tempLocId-1));
 				update(list.get(i));
 			}
 		}
@@ -143,38 +143,23 @@ public class ItemDaoHibernate4 extends BaseDaoHibernate4<Item>
 		// TODO Auto-generated method stub
 		String entityLocation=entity.getLocation();
 		String entityHead=ParseLocation.parseLocationForHead(entityLocation);
-		int entityStart=ParseLocation.parseLocationForStart(entityLocation);
-		int entityEnd=ParseLocation.parseLocationForEnd(entityLocation);
-		int entityStoE=entityEnd-entityStart+1;
 		
 		List<Item> list=findByLocationPlus(entityHead);
 		if(list.contains(entity))
 		list.remove(entity);
 		//get list in the same book shelf 
 		
-		String[] locList=new String[list.size()]; 
-		int[] locListStart=new int[list.size()]; 
-		int[] locListEnd=new int[list.size()]; 
+		int entityId = ParseLocation.parseLocationForId(entityLocation);
 		
 		for(int i=0;i<list.size();i++){
-			locList[i]=list.get(i).getLocation();
-			locListStart[i]=ParseLocation.parseLocationForStart(locList[i]);
-			locListEnd[i]=ParseLocation.parseLocationForEnd(locList[i]);
-			if(locListStart[i]>=entityStart){
-				//>= is better,especially for upItem
-				
-				locListStart[i]=locListStart[i]+entityStoE;
-				locListEnd[i]=locListEnd[i]+entityStoE;
-				locList[i]=ParseLocation.parseStartEndForLocation
-						(locListStart[i], locListEnd[i], entityHead);
-				list.get(i).setLocation(locList[i]);
+			int storedId = ParseLocation.parseLocationForId(list.get(i).getLocation());
+			if(storedId >= entityId){
+				String updatedLocation=ParseLocation.parseIdForLocation(entityHead, storedId+1);
+				list.get(i).setLocation(updatedLocation);
 				update(list.get(i));
-				//update book shelf behind the book
 			}
 		}
-		
-		entity.setState(1);
-		update(entity);
+
 	}
 
 }
