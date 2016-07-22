@@ -34,13 +34,14 @@ public class ItemDaoHibernate4 extends BaseDaoHibernate4<Item>
 			 );
 	}
 	@Override
-	public List<Item> findByLocation(String query) {
-        //this is for system query
+	public List<Item> findByLocationMinus(String query) {
+        //this is for system, to query state<0
 		//get location of shelf
 //		String shelf="";
 		try {
 			//if contain detail location in shelf
-			if(query.contains("t")||query.contains("o")){
+			String[] parts = query.split("-");
+			if(parts.length > 5){//location contains id
 				query=query.substring(0,query.lastIndexOf("-"));
 			}
 		} catch (Exception e) {
@@ -49,7 +50,8 @@ public class ItemDaoHibernate4 extends BaseDaoHibernate4<Item>
 		}
 		
 		return find("select en from "+"Item"
-				 + " en "+"where en.location like '"+query.trim()+"%'");
+				 + " en "+"where en.location like '"+query.trim()+"%'"
+				 + " and en.state<0");
 		//find all items in the shelf 
 	}
 	
@@ -71,7 +73,7 @@ public class ItemDaoHibernate4 extends BaseDaoHibernate4<Item>
 		
 		return find("select en from "+"Item"
 				 + " en "+"where en.location like '"+query.trim()+"%'"
-				 + " and en.state>=0");
+				 + " and en.state>0");
 		//find all items in the shelf 
 	}
 	

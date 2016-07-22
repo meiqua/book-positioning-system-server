@@ -22,7 +22,7 @@ public class Item {
     private String location="?";
 	
 	@Column(name="state")
-	private int state=0;
+	private int state=-1;
 	
 	public Item(String author, String thumbnailUrl, String title, String location, 
 			String id) {

@@ -14,7 +14,7 @@
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close"
 		p:driverClass="com.mysql.jdbc.Driver"
-		p:jdbcUrl="jdbc:mysql://139.196.25.125:3306/itemdb?useUnicode=true&amp;characterEncoding=UTF-8"
+		p:jdbcUrl="jdbc:mysql://115.28.205.144:3306/itemdb?useUnicode=true&amp;characterEncoding=UTF-8"
 		p:user="taotao"
 		p:password="taotaoSB"
 		p:maxPoolSize="40"
@@ -49,9 +49,13 @@
 			</props>
 		</property>
 	</bean>
-	<!-- 定义Service组件，并将DAO组件注入Service组件 -->	
-	<bean id="itemService" class="service.ItemServiceImpl"
+		<bean id="matchSystem" class="service.MatchSystemImpl"
 		p:itemDao-ref="itemDao"/>
+		
+		<!-- 定义Service组件，并将DAO组件注入Service组件 -->	
+		<bean id="itemService" class="service.ItemServiceImpl"
+		p:itemDao-ref="itemDao"
+		p:matchSystem-ref="matchSystem"/>
 		
 		<bean id="dispatchAction" class="action.DispatchAction"
 		scope="prototype"/>

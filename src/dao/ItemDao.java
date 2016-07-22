@@ -12,7 +12,7 @@ public interface ItemDao extends BaseDao<Item>{
 
 	List<Item> findItems(String query);
 
-	List<Item> findByLocation(String query);
+	List<Item> findByLocationMinus(String query);
 
 	void updateForDownItem(Item entity);
 

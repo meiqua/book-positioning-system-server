@@ -10,7 +10,16 @@ import model.*;
 public class ItemServiceImpl implements ItemService
 {
 	private ItemDao itemDao;
+	private MatchSystem matchSystem;
 	
+	public MatchSystem getMatchSystem() {
+		return matchSystem;
+	}
+
+	public void setMatchSystem(MatchSystem matchSystem) {
+		this.matchSystem = matchSystem;
+	}
+
 	public ItemDao getItemDao() {
 		return itemDao;
 	}
@@ -80,6 +89,8 @@ public class ItemServiceImpl implements ItemService
 			}			
 		}
 		itemDao.updateForDownItem(targetItem);	
+		
+		matchSystem.addToMatchList(targetItem);
 	}
 
 	@Override
@@ -91,14 +102,12 @@ public class ItemServiceImpl implements ItemService
 
 		item.setState(state);
 		item.setLocation(location);
-		itemDao.update(item);
-		
-		itemDao.updateForUpItem(item);
-		
+	//	itemDao.update(item);
 		
 		//start match
-		//try to find state=-10 to match
-		//if false,try to find closest to match.
+		matchSystem.match(item);
+		
+		itemDao.updateForUpItem(item);
 	}
 
 	@Override
@@ -127,6 +136,8 @@ public class ItemServiceImpl implements ItemService
 		item.setLocation(location);
 		
 		itemDao.update(item);
+		
+		matchSystem.addToMatchList(item);
 	}
 
 	@Override
